@@ -9,8 +9,9 @@
 | `057f1c9` | Converter moedas com multiplicação Decimal | A conversão dividia pela taxa e passava por float, invertendo o câmbio e perdendo precisão. |
 | `3a8aaf0` | Faturar somente CONFIRMED | O predicado excluía apenas CANCELLED e incluía NO_SHOW nas agregações. |
 | `ff318b6` | Ordenar hotéis por valor decrescente | A ordenação usava o valor crescente, retornando primeiro os hotéis de menor total. |
+| `c5598fd` | Usar UTF-8 nas leituras e escritas do teste adicional de contrato | O teste usava a codificação padrão do sistema ao ler o JSON UTF-8, corrompendo caracteres acentuados no Windows. |
 
-Cada correção está em um commit separado com seus testes de regressão. Não foram alterados os testes fornecidos, os CSVs, os argumentos ou o schema público.
+As cinco correções do CLI estão em commits separados com seus testes de regressão. A correção posterior de codificação altera apenas o teste adicional `tests/test_cli_contract.py`, criado durante a implementação. Não foram alterados os testes fornecidos, os CSVs, os argumentos ou o schema público.
 
 ## Investigação e abordagem
 
@@ -19,6 +20,8 @@ Li as regras do README, os serviços, os repositórios CSV e os testes fornecido
 As correções foram pequenas e localizadas, mantendo a arquitetura existente. Cada grupo de testes foi executado após sua correção e antes de criar o commit correspondente. Dinheiro continua em Decimal até a serialização half-up; o ranking compara valores exatos antes de arredondar.
 
 A cobertura adicional verifica os limites 199/200/201/300 registros, viradas de mês/ano, ano bissexto, múltiplos quartos, estadia sem noites, centavos fracionários, média sem arredondamento intermediário, status não faturáveis, entrada vazia, desempate por hotel e limites do ranking. Testes de contrato cobrem a amostra completa, offset -03:00, saída padrão, criação de diretórios, argumentos inválidos e códigos de saída 0/1/2.
+
+Em 12/11/2026, ao executar novamente os testes e os relatórios no Windows, identifiquei uma falha no teste adicional `test_readme_sample_and_default_output`: **1 failed, 37 passed in 4.39s**. A investigação com IA mostrou que o CLI já gravava corretamente em UTF-8, mas o teste lia o JSON sem codificação explícita, alterando o nome `Hotel Madrid, Gran Vía`. A correção definiu `encoding="utf-8"` nas leituras e escritas de arquivos desse módulo de testes. As asserções foram preservadas e a suíte passou com Python 3.11.9 no Windows.
 
 ## Como validar
 
@@ -35,7 +38,9 @@ PYTHONPATH=src python -m onfly_report --input data/exemplo-validacao.csv --rates
 PYTHONPATH=src python -m onfly_report --input data/reservas_hoteis.csv --rates data/taxas_cambio.csv --output output/report.json
 ```
 
-Resultado observado: **38 passed in 10.53s**, com pytest 8.3.4 e Python **3.12.3**. Ruff 0.8.4: **All checks passed!**; `git diff --check`: sem erros. Python 3.11 não está instalado neste ambiente, portanto a execução nessa versão não foi validada.
+Validação inicial em 11/11/2026: **38 passed in 10.53s**, com pytest 8.3.4 e Python **3.12.3**. Ruff 0.8.4: **All checks passed!**; `git diff --check`: sem erros.
+
+Validação após a correção de codificação, em 12/11/2026, registrada no segundo export: **38 passed in 4.25s**, com pytest **8.3.4** e Python **3.11.9**, no Windows, usando `.venv/Scripts/python.exe -m pytest`. `git diff --check` também passou nessa sessão. Assim, a execução com Python 3.11 foi validada.
 
 A amostra coincide integralmente com os valores esperados no README: 12 reservas, 9 confirmadas, 2 canceladas, 1 no-show, 28 noites, total BRL 7566.00, média BRL 270.21, além dos meses e cinco hotéis esperados.
 
@@ -45,4 +50,9 @@ Dataset principal: 300 reservas, 235 confirmadas, 31 canceladas, 34 no-show, 134
 
 Esta entrega inclui código, testes e documentação local. A publicação do repositório e o envio do formulário ficam a cargo do responsável pela entrega.
 
-A exportação da sessão de planejamento e implementação está em [uso-de-ia/codex-session-01a1cd4a-2286-7d32-8b18-8ad51696e7cd.md](uso-de-ia/codex-session-01a1cd4a-2286-7d32-8b18-8ad51696e7cd.md); ferramenta, modelos e contribuições estão em [uso-de-ia/declaracao.md](uso-de-ia/declaracao.md).
+As exportações das sessões estão em:
+
+- [Planejamento e implementação inicial](uso-de-ia/codex-session-01a1cd4a-2286-7d32-8b18-8ad51696e7cd.md).
+- [Investigação e correção da codificação no teste, com validação no Windows](uso-de-ia/codex-session-01a1d192-1a44-7e42-a7ad-92d12c99fe24.md).
+
+Ferramenta, modelos e contribuições estão em [uso-de-ia/declaracao.md](uso-de-ia/declaracao.md).
