@@ -32,7 +32,7 @@ def test_readme_sample_and_default_output(tmp_path):
     process = invoke(tmp_path, *sample_arguments())
     assert process.returncode == 0, process.stderr
     assert process.stdout.strip() == "Reservas: 12 | Confirmadas: 9 | Noites: 28 | Total BRL: 7566.00"
-    report = json.loads((tmp_path / "output/report.json").read_text())
+    report = json.loads((tmp_path / "output/report.json").read_text(encoding="utf-8"))
     assert set(report) == {"report_version", "generated_at", "summary", "by_month", "top_hotels"}
     assert report["report_version"] == "1.0"
     assert datetime.fromisoformat(report["generated_at"]).utcoffset() == timedelta(hours=-3)
@@ -78,7 +78,7 @@ def test_main_dataset_and_nested_output(tmp_path):
         output,
     )
     assert process.returncode == 0, process.stderr
-    report = json.loads(output.read_text())
+    report = json.loads(output.read_text(encoding="utf-8"))
     assert report["summary"]["total_reservations"] == 300
     months = [row["month"] for row in report["by_month"]]
     assert months == sorted(months)
@@ -95,9 +95,12 @@ def test_invalid_arguments_exit_two(tmp_path, arguments):
 def test_invalid_input_exits_two(tmp_path, kind):
     source = tmp_path / "bad.csv"
     if kind == "columns":
-        source.write_text("wrong\nvalue\n")
+        source.write_text("wrong\nvalue\n", encoding="utf-8")
     elif kind == "types":
-        source.write_text((PROJECT_ROOT / "data/exemplo-validacao.csv").read_text().replace("2025-01-", "invalid-"))
+        source.write_text(
+            (PROJECT_ROOT / "data/exemplo-validacao.csv").read_text(encoding="utf-8").replace("2025-01-", "invalid-"),
+            encoding="utf-8",
+        )
     args = sample_arguments()
     args[1] = source
     assert invoke(tmp_path, *args).returncode == 2
