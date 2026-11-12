@@ -45,4 +45,4 @@ Dataset principal: 300 reservas, 235 confirmadas, 31 canceladas, 34 no-show, 134
 
 Esta entrega inclui código, testes e documentação local. A publicação do repositório e o envio do formulário ficam a cargo do responsável pela entrega.
 
-O registro consolidado de prompts/respostas está em `uso-de-ia/sessao.md`; ferramenta e responsabilidades estão em `uso-de-ia/declaracao.md`.
+A exportação da sessão de planejamento e implementação está em [uso-de-ia/codex-session-01a1cd4a-2286-7d32-8b18-8ad51696e7cd.md](uso-de-ia/codex-session-01a1cd4a-2286-7d32-8b18-8ad51696e7cd.md); ferramenta, modelos e contribuições estão em [uso-de-ia/declaracao.md](uso-de-ia/declaracao.md).

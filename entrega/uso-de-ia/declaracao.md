@@ -1,8 +1,8 @@
 # Declaração de uso de IA
 
-- Ferramenta: OpenAI Codex, via sessão de agente no workspace local.
-- Modelo: identificado pelas instruções da sessão como baseado em GPT-6; a variante exata não foi exposta, portanto não é afirmada aqui.
-- A IA leu o README e o código, identificou os cinco defeitos, propôs o plano, escreveu as correções e testes adicionais, instalou dependências, executou as validações, criou os commits e redigiu esta documentação.
-- O usuário solicitou a investigação e o plano, escolheu a entrega local e pediu a implementação do plano. A sessão não registra revisão manual ou alterações humanas no código após a implementação; essas ações não são presumidas.
-- Os testes fornecidos e os datasets foram preservados. A publicação no GitHub e o envio do formulário não foram realizados.
-- `sessao.md` contém o registro consolidado desta interação, com prompts e respostas; não é uma exportação nativa nem uma transcrição de todos os payloads de ferramentas.
+- **Ferramenta utilizada:** OpenAI Codex, em uma sessão de agente no ambiente local do projeto.
+- **Modelos e níveis de raciocínio utilizados:** GPT-6.1-Sol com nível de raciocínio medium no planejamento e GPT-6.1-Sol com nível de raciocínio high na implementação.
+- **Contribuição da IA:** leu o README e o código, identificou os cinco defeitos, propôs o plano, escreveu as correções e os testes adicionais, instalou dependências, executou as validações, criou os commits e redigiu a versão inicial da documentação de entrega.
+- **Minha contribuição:** solicitei a investigação e o plano, li a proposta inicial, escolhi a entrega local e pedi a implementação do plano. Revisei as entregas produzidas pela IA e editei as entregas finais para atender aos requisitos do README.
+- **Registro da interação:** a exportação da sessão de planejamento e implementação está em [codex-session-01a1cd4a-2286-7d32-8b18-8ad51696e7cd.md](codex-session-01a1cd4a-2286-7d32-8b18-8ad51696e7cd.md).
+- **Escopo da atuação da IA:** os testes fornecidos e os datasets foram preservados. A IA não realizou a publicação no GitHub nem o envio do formulário.
